@@ -1,0 +1,14 @@
+{
+	"name": "siilike/helpers",
+	"description": "Random helper functions for PHP",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Lauri Keel",
+			"email": "siilike@ruja.ee"
+		}
+	],
+	"require": {
+		"php": ">=8.2"
+	}
+}
