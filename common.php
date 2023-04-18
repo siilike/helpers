@@ -80,6 +80,15 @@ function random_string_url($length, $userFriendly = false)
 
 function escape_shell_arg($a): string
 {
+	if(is_numeric($a))
+	{
+		$a = strval($a);
+	}
+	else if(!is_string($a))
+	{
+		throw new \CommonX\IllegalStateException("Shell argument is not a string");
+	}
+
 	if($a[0] === '-')
 	{
 		throw new \CommonX\IllegalStateException("Shell argument starting with a dash");
