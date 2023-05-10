@@ -237,7 +237,7 @@ function array_find($a, $fn)
 	return null;
 }
 
-function array_find_index($a, $fn): ?int
+function array_find_index($a, $fn): string|int|null
 {
 	foreach($a as $k => $b)
 	{
