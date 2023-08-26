@@ -89,6 +89,10 @@ function set_locale0($locale)
 	{
 		$systemLocale = setlocale(LC_ALL, "$locale.utf8", "$locale.UTF-8", "$locale", "zh_CN.utf8", "zh_CN.UTF-8");
 	}
+	else if($locale === 'zh_Hant')
+	{
+		$systemLocale = setlocale(LC_ALL, "$locale.utf8", "$locale.UTF-8", "$locale", "zh_TW.utf8", "zh_TW.UTF-8");
+	}
 	else
 	{
 		$systemLocale = setlocale(LC_ALL, "$locale.utf8", "$locale.UTF-8", "$locale");
