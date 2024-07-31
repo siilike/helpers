@@ -87,5 +87,5 @@ function env($key, $default = null)
 		}
 
 		return $value;
-	})->getOrCall(fn() => value($default));
+	})->getOrCall(fn() => $default instanceof Closure ? $default() : $default);
 }
