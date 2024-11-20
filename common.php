@@ -99,6 +99,11 @@ function escape_shell_arg($a): string
 
 function exec2($cmd, $cwd = '.', $stdin = null, $env = [])
 {
+	if(is_array($cmd))
+	{
+		$cmd = join(" ", array_map('escape_shell_arg', $cmd));
+	}
+
 	if(!$cwd)
 	{
 		$cwd = storage_path('temp');
@@ -126,13 +131,42 @@ function exec2($cmd, $cwd = '.', $stdin = null, $env = [])
 
 		fclose($pipes[0]);
 
-		$stdout = stream_get_contents($pipes[1]);
-		fclose($pipes[1]);
+		stream_set_blocking($pipes[1], false);
+		stream_set_blocking($pipes[2], false);
 
-		$stderr = stream_get_contents($pipes[2]);
+		$code = -1;
+		$stdout = '';
+		$stderr = '';
+
+		$write = [];
+		$except = [];
+
+		while(true)
+		{
+			$status = proc_get_status($proc);
+
+			if(empty($status['running']))
+			{
+				$code = $status['exitcode'];
+				break;
+			}
+
+			$read =
+			[
+				$pipes[1],
+				$pipes[2],
+			];
+
+			\stream_select($read, $write, $except, 0, 200000);
+
+			$stdout .= stream_get_contents($pipes[1]);
+			$stderr .= stream_get_contents($pipes[2]);
+		}
+
+		fclose($pipes[1]);
 		fclose($pipes[2]);
 
-		$code = proc_close($proc);
+		proc_close($proc);
 
 		$ret =
 		[
