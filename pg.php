@@ -32,7 +32,7 @@ function array_to_pg_switch($field, $array, $default = null, $quoteProperty = tr
 	}
 
 	$ret .= ' ELSE '.pg_quote($default);
-	$ret .= 'END';
+	$ret .= ' END';
 
 	return $ret;
 }
