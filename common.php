@@ -204,6 +204,61 @@ function exec2($cmd, $cwd = '.', $stdin = null, $env = [])
 
 /******************************************************************************/
 
+function array_merge_recursive2(...$arrays)
+{
+	$ret = [];
+
+	foreach($arrays as $a)
+	{
+		if(!is_array($a))
+		{
+			throw new IllegalArgumentException("Argument is not an array");
+		}
+
+		if(empty($a))
+		{
+			continue;
+		}
+		else if(array_is_list($a))
+		{
+			if(!empty($ret) && !array_is_list($ret))
+			{
+				throw new IllegalArgumentException("Target is not a list");
+			}
+
+			$ret = array_merge($ret, $a);
+		}
+		else
+		{
+			if(!empty($ret) && array_is_list($ret))
+			{
+				throw new IllegalArgumentException("Target is not an associative array");
+			}
+
+			foreach($a as $b => $c)
+			{
+				if(array_key_exists($b, $ret))
+				{
+					if(is_array($c) && $ret[$b] !== null)
+					{
+						$ret[$b] = array_merge_recursive2($ret[$b], $c);
+					}
+					else
+					{
+						$ret[$b] = $c;
+					}
+				}
+				else
+				{
+					$ret[$b] = $c;
+				}
+			}
+		}
+	}
+
+	return $ret;
+}
+
 /*
  * $a = [];
  * $b = [ '123' => 5 ];
