@@ -313,17 +313,20 @@ function array_unique_strict($a, $strict = true): array
 	return array_values(array_filter($a, fn($v, $k) => array_search($v, $a, $strict) === $k, ARRAY_FILTER_USE_BOTH));
 }
 
-function array_find($a, $fn)
+if(!function_exists('array_find'))
 {
-	foreach($a as $k => $b)
+	function array_find($a, $fn)
 	{
-		if(call_user_func($fn, $b, $k) === true)
+		foreach($a as $k => $b)
 		{
-			return $b;
+			if(call_user_func($fn, $b, $k) === true)
+			{
+				return $b;
+			}
 		}
-	}
 
-	return null;
+		return null;
+	}
 }
 
 function array_find_index($a, $fn): string|int|null
