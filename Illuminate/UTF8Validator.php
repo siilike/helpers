@@ -10,6 +10,6 @@ class UTF8Validator implements \Illuminate\Contracts\Validation\Rule
 
 	public function message()
 	{
-		return ':attribute must be valid UTF-8.';
+		return 'The :attribute must be valid UTF-8.';
 	}
 }
