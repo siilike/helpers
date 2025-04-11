@@ -65,36 +65,23 @@ function streamed_pdf_response($filePath, $args = null)
 
 /******************************************************************************/
 
+// @deprecated
 function closureValidator($c)
 {
-	return new class($c) implements \Illuminate\Contracts\Validation\ImplicitRule
+	return new \Illuminate\Validation\ClosureValidationRule($c);
+}
+
+class IlluminateUtf8Validator implements \Illuminate\Contracts\Validation\Rule
+{
+	public function passes($attribute, $value)
 	{
-		protected $c;
-		protected $msg;
+		return mb_check_encoding($value, 'UTF-8');
+	}
 
-		public function __construct($c)
-		{
-			$this->c = $c;
-		}
-
-		public function passes($k, $v)
-		{
-			$this->msg = null;
-			$c = $this->c;
-
-			$c($k, $v, function($msg)
-			{
-				$this->msg = $msg;
-			});
-
-			return empty($this->msg);
-		}
-
-		public function message()
-		{
-			return $this->msg;
-		}
-	};
+	public function message()
+	{
+		return ':attribute must be valid UTF-8.';
+	}
 }
 
 function validate($input, $rules, $messages = [], $customAttributes = [], $keepEmptyValues = false, $trimInput = true)
