@@ -11,5 +11,10 @@
 	"require": {
 		"php": ">=8.2",
 		"siilike/commonx": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Siilike\\Helpers\\Illuminate\\": "Illuminate/"
+		}
 	}
 }

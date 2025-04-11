@@ -65,36 +65,10 @@ function streamed_pdf_response($filePath, $args = null)
 
 /******************************************************************************/
 
+// @deprecated
 function closureValidator($c)
 {
-	return new class($c) implements \Illuminate\Contracts\Validation\ImplicitRule
-	{
-		protected $c;
-		protected $msg;
-
-		public function __construct($c)
-		{
-			$this->c = $c;
-		}
-
-		public function passes($k, $v)
-		{
-			$this->msg = null;
-			$c = $this->c;
-
-			$c($k, $v, function($msg)
-			{
-				$this->msg = $msg;
-			});
-
-			return empty($this->msg);
-		}
-
-		public function message()
-		{
-			return $this->msg;
-		}
-	};
+	return new \Illuminate\Validation\ClosureValidationRule($c);
 }
 
 function validate($input, $rules, $messages = [], $customAttributes = [], $keepEmptyValues = false, $trimInput = true)
